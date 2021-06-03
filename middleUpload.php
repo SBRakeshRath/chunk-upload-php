@@ -3,13 +3,18 @@ header('Content-Type: application/json; charset=utf-8');
 header("Access-Control-Allow-Methods: PUT, GET, POST");
 header("Access-Control-Allow-Origin: * ");
 
-// echo "hallo" ;
+
 $success = false ;
 $file = $_FILES["fileToUpload"] ;
 $startPointer = $_POST["start_of_chunk"] ;
-$targetFile = "12.jpg" ;
 
-print_r($file);
+$name = $_FILES["fileToUpload"]["name"];
+$extension =  explode(".", $name);
+$extension =  end($extension);
+$targetFile = "./12." . $extension ;
+$targetFile = $_FILES["fileToUpload"]["name"];
+
+// print_r($file);
 // echo $startPointer ;
 
 // now open the file in binary Mode
@@ -33,8 +38,8 @@ fclose($myFile);
 
 // Now lets append the new data to existing data
 $pFS = filesize($targetFile) ;
-echo "\n previous target file size is :- " ;
-echo $pFS;
+// echo "\n previous target file size is :- " ;
+// echo $pFS;
 // echo "\n";
 $openTargetFile =  fopen($targetFile, "a+b") or die("Unable to open file!");
 fwrite($openTargetFile, $newData);
@@ -42,8 +47,8 @@ fclose($openTargetFile);
 clearstatcache();
 
 $cFS = filesize($targetFile) ;
-echo "\n previous target file size is :- " ;
-echo $cFS;
+// echo "\n previous target file size is :- " ;
+// echo $cFS;
 
 if($cFS > $pFS){
     // echo("\n successfully uploaded") ;
@@ -54,3 +59,4 @@ if($cFS > $pFS){
 $responseArray = ["success" => true] ;
 echo json_encode($responseArray);
 
+// exit();
